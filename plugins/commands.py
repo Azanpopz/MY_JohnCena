@@ -92,13 +92,13 @@ async def start(client, message):
 
         btn = []
         btn.append(["🤖 Join Here", invite_link.invite_link, False, 'url'])
-        # btn = [
-        #     [
-        #         InlineKeyboardButton(
-        #             "🤖 Join Here", url=invite_link.invite_link
-        #         )
-        #     ]
-        # ]
+        btn = [
+            [
+                InlineKeyboardButton(
+                    "🤖 Join Here", url=invite_link.invite_link
+                )
+            ]
+        ]
 
         if message.command[1] != "subscribe":
             btn.append(["🔄 Try Again", f"checksub#{message.command[1]}", True, 'cb'])
@@ -127,14 +127,14 @@ async def start(client, message):
         return
 
     file_id = message.command[1]
-    # unique_id, f_id, file_ref, caption = await get_batch(file_id)
+    unique_id, f_id, file_ref, caption = await get_batch(file_id)
 
     settings = None
     if FILE_PROTECT.get(message.from_user.id):
         grpid = FILE_PROTECT.get(message.from_user.id)
         settings = await sett_db.get_settings(str(grpid))
         del FILE_PROTECT[message.from_user.id]
-    # FILE_PROTECT[message.from_user.id] = str(message.chat.id)
+    FILE_PROTECT[message.from_user.id] = str(message.chat.id)
 
     if not settings:
         FILE_SECURE = False
@@ -170,7 +170,7 @@ async def start(client, message):
                     f"@UniversalFilmStudio \n🔊 Gʀᴏᴜᴘ: @UniversalFilmStudioo \n🔊 " \
                     f"Cʜᴀɴɴᴇʟ: <a href='https://t.me/+uuLR9YwyRjg0ODQ0'>Nᴇᴡ Oᴛᴛ Mᴏᴠɪᴇs</a> \n\n🎗️ʝσιи 🎗️ ѕнαяє🎗️ ѕυρρσят🎗️ </b>"
 
-            # f_caption + f"\n\n<code>┈•••✿ @UniversalFilmStudio ✿•••┈\n\n💾 Size: {size}</code>"
+            f_caption + f"\n\n<code>┈•••✿ @UniversalFilmStudio ✿•••┈\n\n💾 Size: {size}</code>"
             try:
                 if file_type not in ["video", 'audio', 'document']:
                     await client.send_cached_media(
@@ -195,23 +195,23 @@ async def start(client, message):
                         caption=f_caption + f"\n\n{f_sub_caption}",
                         protect_content=FILE_SECURE,
                         reply_markup=reply_markup
-                        # InlineKeyboardMarkup(
-                        #     [
-                        #         [
-                        #             InlineKeyboardButton(
-                        #                 '🎭 Nᴇᴡ \nUᴘᴅᴀᴛᴇs', url="https://t.me/UFSFilmUpdate"
-                        #             ),
-                        #             InlineKeyboardButton(
-                        #                 '🎭 ᴍᴏᴠɪᴇs', url="https://t.me/UniversalFilmStudio"
-                        #             )
-                        #         ],
-                        #         [
-                        #             InlineKeyboardButton(
-                        #                 '⭕️ ᴘᴍ ᴍᴇ ⭕️', url="https://t.me/UFSChatBot"
-                        #             )
-                        #         ]
-                        #     ]
-                        # )
+                        InlineKeyboardMarkup(
+                            [
+                                [
+                                    InlineKeyboardButton(
+                                        '🎭 Nᴇᴡ \nUᴘᴅᴀᴛᴇs', url="https://t.me/UFSFilmUpdate"
+                                    ),
+                                    InlineKeyboardButton(
+                                        '🎭 ᴍᴏᴠɪᴇs', url="https://t.me/UniversalFilmStudio"
+                                    )
+                                ],
+                                [
+                                    InlineKeyboardButton(
+                                        '⭕️ ᴘᴍ ᴍᴇ ⭕️', url="https://t.me/UFSChatBot"
+                                    )
+                                ]
+                            ]
+                        )
                     )
             except Exception as err:
                 await sts.edit("FAILED")
@@ -219,40 +219,40 @@ async def start(client, message):
             await asyncio.sleep(0.5)
         return await message.reply(f"<b><a href='https://t.me/UniversalFilmStudio'>Thank For Using Me...</a></b>")
 
-    # if unique_id:
-    #     temp_msg = await message.reply("Please wait...")
-    #     file_args = f_id.split("#")
-    #     cap_args = caption.split("#")
-    #     i = 0
-    #     await asyncio.sleep(2)
-    #     await temp_msg.delete()
-    #     for b_file in file_args:
-    #         f_caption = cap_args[i]
-    #         if f_caption is None:
-    #             f_caption = ""
-    #         f_caption = f_caption + f"\n\n<code>┈•••✿</code> @UniversalFilmStudio <code>✿•••┈</code>"
-    #         i += 1
-    #         try:
-    #             await client.send_cached_media(
-    #                 chat_id=message.from_user.id,
-    #                 file_id=b_file,
-    #                 caption=f_caption,
-    #                 parse_mode="html",
-    #                 reply_markup=InlineKeyboardMarkup(
-    #                     [
-    #                         [
-    #                             InlineKeyboardButton(
-    #                                 '🎭 ⭕️ ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ ⭕️', url="https://t.me/UFSChatBot"
-    #                             )
-    #                         ]
-    #                     ]
-    #                 )
-    #             )
-    #         except Exception as err:
-    #             return await message.reply(f"{str(err)}")
-    #         await asyncio.sleep(1)
-    #
-    #     return await message.reply(f"<b><a href='https://t.me/UniversalFilmStudio'>Thank For Using Me...</a></b>")
+    if unique_id:
+        temp_msg = await message.reply("Please wait...")
+        file_args = f_id.split("#")
+        cap_args = caption.split("#")
+        i = 0
+        await asyncio.sleep(2)
+        await temp_msg.delete()
+        for b_file in file_args:
+            f_caption = cap_args[i]
+            if f_caption is None:
+                f_caption = ""
+            f_caption = f_caption + f"\n\n<code>┈•••✿</code> @UniversalFilmStudio <code>✿•••┈</code>"
+            i += 1
+            try:
+                await client.send_cached_media(
+                    chat_id=message.from_user.id,
+                    file_id=b_file,
+                    caption=f_caption,
+                    parse_mode="html",
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    '🎭 ⭕️ ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ ⭕️', url="https://t.me/UFSChatBot"
+                                )
+                            ]
+                        ]
+                    )
+                )
+            except Exception as err:
+                return await message.reply(f"{str(err)}")
+            await asyncio.sleep(1)
+   
+        return await message.reply(f"<b><a href='https://t.me/UniversalFilmStudio'>Thank For Using Me...</a></b>")
 
     files_ = await get_file_details(file_id)
     if not files_:
@@ -289,23 +289,23 @@ async def start(client, message):
             caption=f_caption,
             protect_content=FILE_SECURE,
             reply_markup=reply_markup
-            # InlineKeyboardMarkup(
-            #     [
-            #         [
-            #             InlineKeyboardButton(
-            #                 '🎭 Nᴇᴡ Uᴘᴅᴀᴛᴇs', url="https://t.me/UFSFilmUpdate"
-            #             ),
-            #             InlineKeyboardButton(
-            #                 '🎭 ᴍᴏᴠɪᴇs', url="https://t.me/UniversalFilmStudio"
-            #             )
-            #         ],
-            #         [
-            #             InlineKeyboardButton(
-            #                 '⭕️ ᴘᴍ ᴍᴇ ⭕️', url="https://t.me/UFSChatBot"
-            #             )
-            #         ]
-            #     ]
-            # )
+            InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            '🎭 Nᴇᴡ Uᴘᴅᴀᴛᴇs', url="https://t.me/UFSFilmUpdate"
+                        ),
+                        InlineKeyboardButton(
+                            '🎭 ᴍᴏᴠɪᴇs', url="https://t.me/UniversalFilmStudio"
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            '⭕️ ᴘᴍ ᴍᴇ ⭕️', url="https://t.me/UFSChatBot"
+                        )
+                    ]
+                ]
+            )
         )
     except Exception as e:
         return await message.reply(e)
