@@ -72,40 +72,40 @@ async def give_filter(client, message):
     for keyword in reversed(sorted(keywords, key=len)):
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
-            await check_manual_filter(client, group_id, keyword, message, 0)
-            return
-            # reply_text, btn, alert, fileid = await find_filter(group_id, keyword)
-            #
-            # if reply_text:
-            #     reply_text = reply_text.replace("\\n", "\n").replace("\\t", "\t")
-            #
-            # if btn is not None:
-            #     try:
-            #         if fileid == "None":
-            #             if btn == "[]":
-            #                 await message.reply_text(reply_text, disable_web_page_preview=True)
-            #             else:
-            #                 button = eval(btn)
-            #                 await message.reply_text(
-            #                     reply_text,
-            #                     disable_web_page_preview=True,
-            #                     reply_markup=InlineKeyboardMarkup(button)
-            #                 )
-            #         elif btn == "[]":
-            #             await message.reply_cached_media(
-            #                 fileid,
-            #                 caption=reply_text or ""
-            #             )
-            #         else:
-            #             button = eval(btn)
-            #             await message.reply_cached_media(
-            #                 fileid,
-            #                 caption=reply_text or "",
-            #                 reply_markup=InlineKeyboardMarkup(button)
-            #             )
-            #     except Exception as e:
-            #         logger.exception(e)
-            #     break
+           await check_manual_filter(client, group_id, keyword, message, 0)
+           return
+             reply_text, btn, alert, fileid = await find_filter(group_id, keyword)
+             
+             if reply_text:
+                 reply_text = reply_text.replace("\\n", "\n").replace("\\t", "\t")
+             
+             if btn is not None:
+                 try:
+                     if fileid == "None":
+                         if btn == "[]":
+                             await message.reply_text(reply_text, disable_web_page_preview=True)
+                         else:
+                             button = eval(btn)
+                             await message.reply_text(
+                                 reply_text,
+                                 disable_web_page_preview=True,
+                                 reply_markup=InlineKeyboardMarkup(button)
+                             )
+                     elif btn == "[]":
+                         await message.reply_cached_media(
+                             fileid,
+                             caption=reply_text or ""
+                         )
+                     else:
+                         button = eval(btn)
+                         await message.reply_cached_media(
+                             fileid,
+                             caption=reply_text or "",
+                             reply_markup=InlineKeyboardMarkup(button)
+                         )
+                 except Exception as e:
+                     logger.exception(e)
+                 break
     else:
         await auto_filter(client, message)
 
@@ -140,38 +140,38 @@ async def give_filter_edited(client, message):
         if re.search(pattern, name, flags=re.IGNORECASE):
             await check_manual_filter(client, group_id, keyword, message, 0)
             return
-            # reply_text, btn, alert, fileid = await find_filter(group_id, keyword)
-            #
-            # if reply_text:
-            #     reply_text = reply_text.replace("\\n", "\n").replace("\\t", "\t")
-            #
-            # if btn is not None:
-            #     try:
-            #         if fileid == "None":
-            #             if btn == "[]":
-            #                 await message.reply_text(reply_text, disable_web_page_preview=True)
-            #             else:
-            #                 button = eval(btn)
-            #                 await message.reply_text(
-            #                     reply_text,
-            #                     disable_web_page_preview=True,
-            #                     reply_markup=InlineKeyboardMarkup(button)
-            #                 )
-            #         elif btn == "[]":
-            #             await message.reply_cached_media(
-            #                 fileid,
-            #                 caption=reply_text or ""
-            #             )
-            #         else:
-            #             button = eval(btn)
-            #             await message.reply_cached_media(
-            #                 fileid,
-            #                 caption=reply_text or "",
-            #                 reply_markup=InlineKeyboardMarkup(button)
-            #             )
-            #     except Exception as e:
-            #         logger.exception(e)
-            #     break
+              reply_text, btn, alert, fileid = await find_filter(group_id, keyword)
+             
+              if reply_text:
+                 reply_text = reply_text.replace("\\n", "\n").replace("\\t", "\t")
+             
+              if btn is not None:
+                  try:
+                      if fileid == "None":
+                          if btn == "[]":
+                              await message.reply_text(reply_text, disable_web_page_preview=True)
+                          else:
+                              button = eval(btn)
+                              await message.reply_text(
+                                  reply_text,
+                                  disable_web_page_preview=True,
+                                  reply_markup=InlineKeyboardMarkup(button)
+                              )
+                      elif btn == "[]":
+                          await message.reply_cached_media(
+                              fileid,
+                              caption=reply_text or ""
+                          )
+                      else:
+                          button = eval(btn)
+                          await message.reply_cached_media(
+                              fileid,
+                              caption=reply_text or "",
+                              reply_markup=InlineKeyboardMarkup(button)
+                          )
+                  except Exception as e:
+                      logger.exception(e)
+                  break
     else:
         await auto_filter(client, message)
 
@@ -1007,47 +1007,25 @@ async def cb_handler(client: Client, query: CallbackQuery):
             text=script.START_TXT.format(query.from_user.mention, temp.U_NAME, temp.B_NAME),
             reply_markup=reply_markup
         )
+    
     elif query.data == "help":
-        # if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
-        await query.message.edit_text(
-            text=script.HELP_STRINGS.format(query.from_user.mention, "@lnc3f3r"),
-            parse_mode="html",
-            reply_markup=keyboard)
-
-        # buttons = [
-        #     [
-        #         InlineKeyboardButton('Manual Filter', callback_data='manuelfilter'),
-        #         InlineKeyboardButton('Auto Filter', callback_data='autofilter')
-        #     ],
-        #     [
-        #         InlineKeyboardButton('Connection', callback_data='coct'),
-        #         InlineKeyboardButton('Extra Mods', callback_data='extra')
-        #     ],
-        #     [
-        #         InlineKeyboardButton('🏠 Home', callback_data='start'),
-        #         InlineKeyboardButton('🔮 Status', callback_data='stats')
-        #     ]
-        # ]
-        # reply_markup = InlineKeyboardMarkup(buttons)
-        # await query.message.edit_text(
-        #     text=script.HELP_TXT.format(query.from_user.mention),
-        #     reply_markup=reply_markup
-        # )
-    elif query.data == "about":
         buttons = [
-            [
-                InlineKeyboardButton('🤖 Updates', url='https://t.me/TeamEvamaria'),
-                InlineKeyboardButton('♥️ Source', callback_data='source')
-            ],
-            [
-                InlineKeyboardButton('🏠 Home', callback_data='start'),
-                InlineKeyboardButton('🔐 Close', callback_data='close_data')
-            ]
-        ]
+             [
+                 InlineKeyboardButton('Manual Filter', callback_data='manuelfilter'),
+                 InlineKeyboardButton('Auto Filter', callback_data='autofilter')
+             ],
+             [
+                 InlineKeyboardButton('Connection', callback_data='coct'),
+                 InlineKeyboardButton('Extra Mods', callback_data='extra')
+             ],
+             [
+                 InlineKeyboardButton('🏠 Home', callback_data='start'),
+                 InlineKeyboardButton('🔮 Status', callback_data='stats')
+             ]
+         ]
         reply_markup = InlineKeyboardMarkup(buttons)
         await query.message.edit_text(
-            text=script.ABOUT_TXT.format(temp.B_NAME),
+            text=script.HELP_TXT.format(query.from_user.mention),
             reply_markup=reply_markup
         )
     elif query.data == "source":
@@ -1682,9 +1660,9 @@ async def advantage_spell_chok(client, msg):
         await asyncio.sleep(15)  # in seconds
         await Send_message.delete()
         await msg.delete()
-        # k = await msg.reply("I couldn't find any movie in that name.")
-        # await asyncio.sleep(8)
-        # await k.delete()
+        k = await msg.reply("I couldn't find any movie in that name.")
+        await asyncio.sleep(8)
+        await k.delete()
         return
     regex = re.compile(r".*(imdb|wikipedia).*", re.IGNORECASE)  # look for imdb / wiki results
     gs = list(filter(regex.match, g_s))
@@ -1722,9 +1700,9 @@ async def advantage_spell_chok(client, msg):
         await asyncio.sleep(15)  # in seconds
         await Send_message.delete()
         await msg.delete()
-        # k = await msg.reply("I Couldn't Find Anything Related To That. Check Your Spelling")
-        # await asyncio.sleep(8)
-        # await k.delete()
+        k = await msg.reply("I Couldn't Find Anything Related To That. Check Your Spelling")
+        await asyncio.sleep(8)
+        await k.delete()
         return
     SPELL_CHECK[msg.id] = movielist
     i = 1
@@ -1758,11 +1736,8 @@ async def advantage_spell_chok(client, msg):
     btn.insert(0, [
         InlineKeyboardButton("⚜ Nᴇᴡ Oᴛᴛ Mᴏᴠɪᴇs ⚜", url="https://t.me/+uuLR9YwyRjg0ODQ0")
     ])
-    #
-    # btn.insert(0, [
-    #     InlineKeyboardButton("⭕️ ᴘᴍ ᴍᴇ ⭕️", url="https://t.me/UFSChatBot"),
-    #     InlineKeyboardButton("⚜ ɴᴇᴡ ᴍᴏᴠɪᴇs ⚜", url="https://t.me/UFSNewRelease")
-    # ])
+    
+      
 
     d_msg = await msg.reply(f"I Couldn't Find Anything Related To That\n\n"
                             f"**എന്താണ്‌ മാഷേ, അയക്കും മുമ്പ്‌ കറക്റ്റ്‌ ആണോ ന്ന് ഒന്ന് ചെക്ക്‌ ചെയ്യ്‌.**\n\n"
